@@ -66,13 +66,16 @@ def main():
 
         # Set the updated parameters before computing disparity map
         stereo.setNumDisparities(numDisparities)
-        stereo.setBlockSize(blockSize)
+        # stereo.setBlockSize(blockSize)
+        stereo.setBlockSize(11) # Block size must be 5, 7, 9 ... 255 (odd numbers). Using a fixed value here as suggested in OpenCV docs
         stereo.setPreFilterType(preFilterType)
         stereo.setPreFilterSize(preFilterSize)
         stereo.setPreFilterCap(preFilterCap)
         stereo.setTextureThreshold(textureThreshold)
-        stereo.setUniquenessRatio(uniquenessRatio)
-        stereo.setSpeckleRange(speckleRange)
+        # stereo.setUniquenessRatio(uniquenessRatio)
+        stereo.setUniquenessRatio(15)
+        # stereo.setSpeckleRange(speckleRange)
+        stereo.setSpeckleRange(100)
         stereo.setSpeckleWindowSize(speckleWindowSize)
         stereo.setDisp12MaxDiff(disp12MaxDiff)
         stereo.setMinDisparity(minDisparity)

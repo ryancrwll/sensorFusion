@@ -1,0 +1,14 @@
+    # Current parameters: STATUE ALPHA 0
+    block_size= 2 * 10 + 5
+    num_disparities=16 * 25
+    min_disparity=134 
+    prefilter_type=0 
+    prefilter_size=15
+    prefilter_cap=62
+    texture_threshold=100
+    uniqueness_ratio=15
+    speckle_size=60
+    speckle_range=25
+    disp12_max_diff =25
+
+

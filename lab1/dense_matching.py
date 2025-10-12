@@ -39,33 +39,63 @@ def main():
     print('- Computing the disparity map...')
     ### Ex. 7: Play with the stereo matching parameters in order to obtain the best dense reconstruction for each of the stereo pairs provided
     # Stereo Matching parameters
-    #  --- Disparity SSD ---
-    block_size =   # SSD window size. Must be an odd number
-    num_disparities =    # Maximum disparity minus minimum disparity. The value is always greater than zero. In the current implementation, this parameter must be divisible by 16.
-    min_disparity =     # Minimum possible disparity value. Normally, it is zero but sometimes rectification algorithms can shift images, so this parameter needs to be adjusted accordingly.
-    # --- Disparity pre-filtering ---
-    prefilter_type = cv2.STEREO_BM_PREFILTER_XSOBEL # Prefilter to enhance results. Possibilities: cv2.STEREO_BM_PREFILTER_XSOBEL or cv2.STEREO_BM_PREFILTER_NORMALIZED_RESPONSE
-    prefilter_size =      # Prefilter window size
-    prefilter_cap =      # Truncation value for the prefiltered image pixels.
-    # --- Disparity post-filtering ---
-    disp12_max_diff =    # Maximum allowed difference (in integer pixel units) in the left-right disparity check. Set it to a non-positive value to disable the check.
-    texture_threshold =   # Filters disparity readings based on the amount of texture in the SSD window
-    uniqueness_ratio =    # Margin in percentage by which the best (minimum) computed cost function value should "win" the second best value to consider the found match correct. Normally, a value within the 5-15 range is good enough.
-    speckle_size =      # Maximum size of smooth disparity regions to consider their noise speckles and invalidate. Set it to 0 to disable speckle filtering. Otherwise, set it somewhere in the 50-200 range.
-    speckle_range =       # Maximum disparity variation within each connected component. If you do speckle filtering, set the parameter to a positive value, it will be implicitly multiplied by 16. Normally, 1 or 2 is good enough.
-    ###
+
+
+    block_size=21 
+    num_disparities=400 
+    min_disparity=134 
+    prefilter_type=0 
+    prefilter_size=15
+    prefilter_cap=62
+    texture_threshold=100
+    uniqueness_ratio=15
+    speckle_size=60
+    speckle_range=25
+    disp12_max_diff =25
+
+    # #  --- Disparity SSD ---
+    # block_size = 2*8+5                # SSD window size. Must be an odd number
+    # num_disparities = 25*16           # Maximum disparity minus minimum disparity. The value is always greater than zero. In the current implementation, this parameter must be divisible by 16.
+    # min_disparity = 133               # Minimum possible disparity value. Normally, it is zero but sometimes rectification algorithms can shift images, so this parameter needs to be adjusted accordingly.
+    # # --- Disparity pre-filtering ---
+    # prefilter_type =  cv2.STEREO_BM_PREFILTER_NORMALIZED_RESPONSE # Prefilter to enhance results. Possibilities: cv2.STEREO_BM_PREFILTER_XSOBEL or cv2.STEREO_BM_PREFILTER_NORMALIZED_RESPONSE
+    # prefilter_size =  5              # Prefilter window size
+    # prefilter_cap = 62                # Truncation value for the prefiltered image pixels.
+    # # --- Disparity post-filtering ---
+    # disp12_max_diff = 25              # Maximum allowed difference (in integer pixel units) in the left-right disparity check. Set it to a non-positive value to disable the check.
+    # texture_threshold = 100            # Filters disparity readings based on the amount of texture in the SSD window
+    # uniqueness_ratio = 6              # Margin in percentage by which the best (minimum) computed cost function value should "win" the second best value to consider the found match correct. Normally, a value within the 5-15 range is good enough.
+    # speckle_size =  2*30                 # Maximum size of smooth disparity regions to consider their noise speckles and invalidate. Set it to 0 to disable speckle filtering. Otherwise, set it somewhere in the 50-200 range.
+    # speckle_range = 15                 # Maximum disparity variation within each connected component. If you do speckle filtering, set the parameter to a positive value, it will be implicitly multiplied by 16. Normally, 1 or 2 is good enough.
+    # ###
 
     ### Ex. 8: Change the Block matching algorithm below by the Semi-Global Block Matching algorithm and find the suitable parameters for the different pairs
-    stereo = cv2.StereoBM_create(numDisparities=num_disparities, blockSize=block_size)
-    stereo.setMinDisparity(min_disparity)
-    stereo.setPreFilterType(prefilter_type)
-    stereo.setPreFilterSize(prefilter_size)
-    stereo.setPreFilterCap(prefilter_cap)
-    stereo.setDisp12MaxDiff(disp12_max_diff)
-    stereo.setTextureThreshold(texture_threshold)
-    stereo.setUniquenessRatio(uniqueness_ratio)
-    stereo.setSpeckleWindowSize(speckle_size)
-    stereo.setSpeckleRange(speckle_range)
+    # stereo = cv2.StereoBM_create(numDisparities=num_disparities, blockSize=block_size)
+
+    stereo = cv2.StereoSGBM_create(minDisparity=min_disparity,
+                                   numDisparities=num_disparities,
+                                   blockSize=block_size,
+                                   P1=8 * 3 * block_size ** 2,
+                                   P2=32 * 3 * block_size ** 2,
+                                   disp12MaxDiff=disp12_max_diff,
+                                   preFilterCap=prefilter_cap,
+                                   uniquenessRatio=uniqueness_ratio,
+                                   speckleWindowSize=speckle_size,
+                                   speckleRange=speckle_range,
+                                   mode=cv2.STEREO_SGBM_MODE_SGBM_3WAY
+                                   )
+
+
+
+    # stereo.setMinDisparity(min_disparity)
+    # stereo.setPreFilterType(prefilter_type)
+    # stereo.setPreFilterSize(prefilter_size)
+    # stereo.setPreFilterCap(prefilter_cap)
+    # stereo.setDisp12MaxDiff(disp12_max_diff)
+    # stereo.setTextureThreshold(texture_threshold)
+    # stereo.setUniquenessRatio(uniqueness_ratio)
+    # stereo.setSpeckleWindowSize(speckle_size)
+    # stereo.setSpeckleRange(speckle_range)
     ###
 
     disp = stereo.compute(imgLG, imgRG)
@@ -109,10 +139,38 @@ def main():
         pcd.points = o3d.utility.Vector3dVector(p3d)
         pcd.colors = o3d.utility.Vector3dVector(p3d_colors/255)
 
-        if param.debug:            
-            # Visualize the points
-            print('- Showing the reconstructed 3D points, press ''q'' or close the window to continue...')
-            o3d.visualization.draw_geometries([pcd])
+    if param.debug:
+        print('- Showing the reconstructed 3D points with reference frame and grid...')
+        
+        # Create a coordinate frame (XYZ axes)
+        frame = o3d.geometry.TriangleMesh.create_coordinate_frame(size=0.2, origin=[0, 0, 0])
+
+        # Create a simple grid plane for visual reference
+        grid = o3d.geometry.LineSet()
+        grid_points = []
+        grid_lines = []
+        step = 0.1
+        size = 2.0  # grid extends ±size meters
+
+        # Generate grid points (XY plane at Z=0)
+        idx = 0
+        for x in np.arange(-size, size + step, step):
+            grid_points.append([x, -size, 0])
+            grid_points.append([x, size, 0])
+            grid_lines.append([idx, idx + 1])
+            idx += 2
+        for y in np.arange(-size, size + step, step):
+            grid_points.append([-size, y, 0])
+            grid_points.append([size, y, 0])
+            grid_lines.append([idx, idx + 1])
+            idx += 2
+
+        grid.points = o3d.utility.Vector3dVector(np.array(grid_points))
+        grid.lines = o3d.utility.Vector2iVector(np.array(grid_lines))
+        grid.colors = o3d.utility.Vector3dVector([[0.5, 0.5, 0.5]] * len(grid_lines))  # gray lines
+
+        # Visualize all together
+        o3d.visualization.draw_geometries([pcd, frame, grid])
 
         # Write the result to a PLY file
         print('- Saving the 3d point cloud...')

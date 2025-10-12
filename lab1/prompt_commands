@@ -1,0 +1,101 @@
+## Calibation monocular (intrinsic)
+python 3dpsf_lab_1_stereo/monocular_calibration.py \
+--row_corners 8 \
+--col_corners 12 \
+--squares_size 0.02 \
+--images_dir ./sample_data/calibration/left/ \
+--out_calib ./sample_data/left_calib.yaml 
+
+python 3dpsf_lab_1_stereo/monocular_calibration.py \
+--row_corners 8 \
+--col_corners 12 \
+--squares_size 0.02 \
+--images_dir ./sample_data/calibration/right/ \
+--out_calib ./sample_data/right_calib.yaml 
+
+## Calibration stereo (extrinsic)
+python 3dpsf_lab_1_stereo/stereo_calibration.py \
+--row_corners 8 \
+--col_corners 12 \
+--squares_size 0.02 \
+--left_images_dir ./sample_data/calibration/stereo/left \
+--right_images_dir ./sample_data/calibration/stereo/right \
+--left_calib_file ./sample_data/left_calib.yaml \
+--right_calib_file ./sample_data/right_calib.yaml \
+--out_file ./sample_data/stereo_calib.yaml 
+
+## Rectify images
+python ./3dpsf_lab_1_stereo/rectify_stereo_dataset.py \
+--left_images_dir ./sample_data/reconstruction/left/ \
+--right_images_dir ./sample_data/reconstruction/right/ \
+--out_left_images_dir ./sample_data/rectified_images_0/left/ \
+--out_right_images_dir ./sample_data/rectified_images_0/right/ \
+--out_calib ./sample_data/rectify_calib_0.yaml \
+--alpha 0 \
+--stereo_calib ./sample_data/stereo_calib.yaml 
+
+
+python ./3dpsf_lab_1_stereo/rectify_stereo_dataset.py \
+--left_images_dir ./sample_data/reconstruction/left/ \
+--right_images_dir ./sample_data/reconstruction/right/ \
+--out_left_images_dir ./sample_data/rectified_images_1/left/ \
+--out_right_images_dir ./sample_data/rectified_images_1/right/ \
+--out_calib ./sample_data/rectify_calib_1.yaml \
+--alpha 1 \
+--stereo_calib ./sample_data/stereo_calib.yaml 
+
+## Sparse matching simple
+python ./3dpsf_lab_1_stereo/sparse_matching_simple.py \
+--left_image ./sample_data/rectified_images_0/left/left_boxes.png \
+--right_image ./sample_data/rectified_images_0/right/right_boxes.png \
+--out_pts_file ./sample_data/points/boxes_0.ply \
+--rect_stereo_calib ./sample_data/rectify_calib_0.yaml\
+--debug
+
+python ./3dpsf_lab_1_stereo/sparse_matching_simple.py \
+--left_image ./sample_data/rectified_images_1/left/left_boxes.png \
+--right_image ./sample_data/rectified_images_1/right/right_boxes.png \
+--out_pts_file ./sample_data/points/boxes_1.ply \
+--rect_stereo_calib ./sample_data/rectify_calib_1.yaml 
+
+
+
+python ./3dpsf_lab_1_stereo/sparse_matching_simple.py \
+--left_image ./sample_data/rectified_images_0/left/left_statue.png \
+--right_image ./sample_data/rectified_images_0/right/right_statue.png \
+--out_pts_file ./sample_data/points/statue_0.ply \
+--rect_stereo_calib ./sample_data/rectify_calib_0.yaml\
+--debug
+
+python ./3dpsf_lab_1_stereo/sparse_matching_simple.py \
+--left_image ./sample_data/rectified_images_1/left/left_statue.png \
+--right_image ./sample_data/rectified_images_1/right/right_statue.png \
+--out_pts_file ./sample_data/points/statue_1.ply \
+--rect_stereo_calib ./sample_data/rectify_calib_1.yaml 
+
+
+## Sparse matching 
+python ./3dpsf_lab_1_stereo/dense_matching.py \
+--left_image ./sample_data/rectified_images_0/left/left_statue.png \
+--right_image ./sample_data/rectified_images_0/right/right_statue.png \
+--rect_stereo_calib ./sample_data/rectify_calib_0.yaml \
+--out_pts_file ./sample_data/points/dense_statue_0.ply \
+--debug
+
+
+
+## Costum sparse matching
+python ./3dpsf_lab_1_stereo/dense_matching_gui_costum.py \
+--left_image ./sample_data/rectified_images_0/left/left_statue.png \
+--right_image ./sample_data/rectified_images_0/right/right_statue.png \
+--rect_stereo_calib ./sample_data/rectify_calib_0.yaml 
+
+python ./3dpsf_lab_1_stereo/dense_matching_gui_costum.py \
+--left_image ./sample_data/rectified_images_1/left/left_statue.png \
+--right_image ./sample_data/rectified_images_1/right/right_statue.png \
+--rect_stereo_calib ./sample_data/rectify_calib_1.yaml 
+
+python ./3dpsf_lab_1_stereo/dense_matching_gui_costum.py \
+--left_image ./sample_data/rectified_images_0/left/left_boxes.png \
+--right_image ./sample_data/rectified_images_0/right/right_boxes.png \
+--rect_stereo_calib ./sample_data/rectify_calib_0.yaml 
