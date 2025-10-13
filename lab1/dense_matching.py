@@ -41,9 +41,9 @@ def main():
     # Stereo Matching parameters
 
 
-    block_size=21 
-    num_disparities=400 
-    min_disparity=134 
+    block_size=11
+    num_disparities=16*20 
+    min_disparity=144 
     prefilter_type=0 
     prefilter_size=15
     prefilter_cap=62
@@ -70,7 +70,17 @@ def main():
     # ###
 
     ### Ex. 8: Change the Block matching algorithm below by the Semi-Global Block Matching algorithm and find the suitable parameters for the different pairs
-    # stereo = cv2.StereoBM_create(numDisparities=num_disparities, blockSize=block_size)
+    # stereo = cv2.StereoBM_create(numDisparities=num_disparities, 
+    #                              blockSize=block_size)
+    # stereo.setMinDisparity(min_disparity)
+    # stereo.setPreFilterType(prefilter_type)
+    # stereo.setPreFilterSize(prefilter_size)
+    # stereo.setPreFilterCap(prefilter_cap)
+    # stereo.setDisp12MaxDiff(disp12_max_diff)
+    # stereo.setTextureThreshold(texture_threshold)
+    # stereo.setUniquenessRatio(uniqueness_ratio)
+    # stereo.setSpeckleWindowSize(speckle_size)
+    # stereo.setSpeckleRange(speckle_range)
 
     stereo = cv2.StereoSGBM_create(minDisparity=min_disparity,
                                    numDisparities=num_disparities,
@@ -84,18 +94,6 @@ def main():
                                    speckleRange=speckle_range,
                                    mode=cv2.STEREO_SGBM_MODE_SGBM_3WAY
                                    )
-
-
-
-    # stereo.setMinDisparity(min_disparity)
-    # stereo.setPreFilterType(prefilter_type)
-    # stereo.setPreFilterSize(prefilter_size)
-    # stereo.setPreFilterCap(prefilter_cap)
-    # stereo.setDisp12MaxDiff(disp12_max_diff)
-    # stereo.setTextureThreshold(texture_threshold)
-    # stereo.setUniquenessRatio(uniqueness_ratio)
-    # stereo.setSpeckleWindowSize(speckle_size)
-    # stereo.setSpeckleRange(speckle_range)
     ###
 
     disp = stereo.compute(imgLG, imgRG)
