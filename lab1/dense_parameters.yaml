@@ -1,0 +1,36 @@
+    # Current parameters: STATUE ALPHA 0 block matching
+    block_size= 2 * 10 + 5
+    num_disparities=16 * 25
+    min_disparity=134 
+    prefilter_type=0 
+    prefilter_size=15
+    prefilter_cap=62
+    texture_threshold=100
+    uniqueness_ratio=15
+    speckle_size=60
+    speckle_range=25
+    disp12_max_diff =25
+
+    # Current parameters: STATUE ALPHA 0 semi global matching
+    block_size= 11
+    num_disparities=16 * 20
+    min_disparity=153
+    uniqueness_ratio=9
+    speckle_size=100
+    speckle_range=31
+    disp12_max_diff =8
+
+
+    ## Aquired image  ENIS ALPHA 0 block matching
+    block_size= 2 * 1 + 5
+    num_disparities=16 * 13
+    min_disparity=77 
+    prefilter_type=1 
+    prefilter_size=2*8+5
+    prefilter_cap=57
+    texture_threshold=31
+    uniqueness_ratio=6
+    speckle_size=2*20
+    speckle_range=30
+    disp12_max_diff =12
+

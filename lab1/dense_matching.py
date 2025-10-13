@@ -41,18 +41,6 @@ def main():
     # Stereo Matching parameters
 
 
-    block_size=11
-    num_disparities=16*20 
-    min_disparity=144 
-    prefilter_type=0 
-    prefilter_size=15
-    prefilter_cap=62
-    texture_threshold=100
-    uniqueness_ratio=15
-    speckle_size=60
-    speckle_range=25
-    disp12_max_diff =25
-
     # #  --- Disparity SSD ---
     # block_size = 2*8+5                # SSD window size. Must be an odd number
     # num_disparities = 25*16           # Maximum disparity minus minimum disparity. The value is always greater than zero. In the current implementation, this parameter must be divisible by 16.
@@ -70,31 +58,53 @@ def main():
     # ###
 
     ### Ex. 8: Change the Block matching algorithm below by the Semi-Global Block Matching algorithm and find the suitable parameters for the different pairs
-    # stereo = cv2.StereoBM_create(numDisparities=num_disparities, 
-    #                              blockSize=block_size)
-    # stereo.setMinDisparity(min_disparity)
-    # stereo.setPreFilterType(prefilter_type)
-    # stereo.setPreFilterSize(prefilter_size)
-    # stereo.setPreFilterCap(prefilter_cap)
-    # stereo.setDisp12MaxDiff(disp12_max_diff)
-    # stereo.setTextureThreshold(texture_threshold)
-    # stereo.setUniquenessRatio(uniqueness_ratio)
-    # stereo.setSpeckleWindowSize(speckle_size)
-    # stereo.setSpeckleRange(speckle_range)
+    
+    ## Aquired image 
+    block_size= 2 * 1 + 5
+    num_disparities=16 * 13
+    min_disparity=77 
+    prefilter_type=1 
+    prefilter_size=2*8+5
+    prefilter_cap=57
+    texture_threshold=31
+    uniqueness_ratio=6
+    speckle_size=2*20
+    speckle_range=30
+    disp12_max_diff =12
+    stereo = cv2.StereoBM_create(numDisparities=num_disparities, 
+                                 blockSize=block_size)
+    stereo.setMinDisparity(min_disparity)
+    stereo.setPreFilterType(prefilter_type)
+    stereo.setPreFilterSize(prefilter_size)
+    stereo.setPreFilterCap(prefilter_cap)
+    stereo.setDisp12MaxDiff(disp12_max_diff)
+    stereo.setTextureThreshold(texture_threshold)
+    stereo.setUniquenessRatio(uniqueness_ratio)
+    stereo.setSpeckleWindowSize(speckle_size)
+    stereo.setSpeckleRange(speckle_range)
 
-    stereo = cv2.StereoSGBM_create(minDisparity=min_disparity,
-                                   numDisparities=num_disparities,
-                                   blockSize=block_size,
-                                   P1=8 * 3 * block_size ** 2,
-                                   P2=32 * 3 * block_size ** 2,
-                                   disp12MaxDiff=disp12_max_diff,
-                                   preFilterCap=prefilter_cap,
-                                   uniquenessRatio=uniqueness_ratio,
-                                   speckleWindowSize=speckle_size,
-                                   speckleRange=speckle_range,
-                                   mode=cv2.STEREO_SGBM_MODE_SGBM_3WAY
-                                   )
-    ###
+    # block_size= 11
+    # num_disparities=16 * 20
+    # min_disparity=153
+    # uniqueness_ratio=9
+    # speckle_size=100
+    # speckle_range=31
+    # disp12_max_diff =8
+    # prefilter_cap =63
+
+    # stereo = cv2.StereoSGBM_create(minDisparity=min_disparity,
+    #                                numDisparities=num_disparities,
+    #                                blockSize=block_size,
+    #                                P1=8 * 3 * block_size ** 2,
+    #                                P2=32 * 3 * block_size ** 2,
+    #                                disp12MaxDiff=disp12_max_diff,
+    #                                preFilterCap=prefilter_cap,
+    #                                uniquenessRatio=uniqueness_ratio,
+    #                                speckleWindowSize=speckle_size,
+    #                                speckleRange=speckle_range,
+    #                                mode=cv2.STEREO_SGBM_MODE_SGBM_3WAY
+    #                                )
+    # ###
 
     disp = stereo.compute(imgLG, imgRG)
     # NOTE: StereoBM::compute returns a 16bit signed single channel image (CV_16S) containing a disparity map scaled by 16. 
@@ -141,7 +151,7 @@ def main():
         print('- Showing the reconstructed 3D points with reference frame and grid...')
         
         # Create a coordinate frame (XYZ axes)
-        frame = o3d.geometry.TriangleMesh.create_coordinate_frame(size=0.2, origin=[0, 0, 0])
+        frame = o3d.geometry.TriangleMesh.create_coordinate_frame(size=0.0002, origin=[0, 0, 0])
 
         # Create a simple grid plane for visual reference
         grid = o3d.geometry.LineSet()
