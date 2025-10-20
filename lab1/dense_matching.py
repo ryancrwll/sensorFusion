@@ -60,50 +60,50 @@ def main():
     ### Ex. 8: Change the Block matching algorithm below by the Semi-Global Block Matching algorithm and find the suitable parameters for the different pairs
     
     ## Aquired image 
-    block_size= 2 * 1 + 5
-    num_disparities=16 * 13
-    min_disparity=77 
-    prefilter_type=1 
-    prefilter_size=2*8+5
-    prefilter_cap=57
-    texture_threshold=31
-    uniqueness_ratio=6
-    speckle_size=2*20
-    speckle_range=30
-    disp12_max_diff =12
-    stereo = cv2.StereoBM_create(numDisparities=num_disparities, 
-                                 blockSize=block_size)
-    stereo.setMinDisparity(min_disparity)
-    stereo.setPreFilterType(prefilter_type)
-    stereo.setPreFilterSize(prefilter_size)
-    stereo.setPreFilterCap(prefilter_cap)
-    stereo.setDisp12MaxDiff(disp12_max_diff)
-    stereo.setTextureThreshold(texture_threshold)
-    stereo.setUniquenessRatio(uniqueness_ratio)
-    stereo.setSpeckleWindowSize(speckle_size)
-    stereo.setSpeckleRange(speckle_range)
+    # block_size= 2 * 1 + 5
+    # num_disparities=16 * 13
+    # min_disparity=77 
+    # prefilter_type=1 
+    # prefilter_size=2*8+5
+    # prefilter_cap=57
+    # texture_threshold=31
+    # uniqueness_ratio=6
+    # speckle_size=2*20
+    # speckle_range=30
+    # disp12_max_diff =12
+    # stereo = cv2.StereoBM_create(numDisparities=num_disparities, 
+    #                              blockSize=block_size)
+    # stereo.setMinDisparity(min_disparity)
+    # stereo.setPreFilterType(prefilter_type)
+    # stereo.setPreFilterSize(prefilter_size)
+    # stereo.setPreFilterCap(prefilter_cap)
+    # stereo.setDisp12MaxDiff(disp12_max_diff)
+    # stereo.setTextureThreshold(texture_threshold)
+    # stereo.setUniquenessRatio(uniqueness_ratio)
+    # stereo.setSpeckleWindowSize(speckle_size)
+    # stereo.setSpeckleRange(speckle_range)
 
-    # block_size= 11
-    # num_disparities=16 * 20
-    # min_disparity=153
-    # uniqueness_ratio=9
-    # speckle_size=100
-    # speckle_range=31
-    # disp12_max_diff =8
-    # prefilter_cap =63
+    block_size= 11
+    num_disparities=16 * 20
+    min_disparity=153
+    uniqueness_ratio=9
+    speckle_size=100
+    speckle_range=31
+    disp12_max_diff =8
+    prefilter_cap=63
 
-    # stereo = cv2.StereoSGBM_create(minDisparity=min_disparity,
-    #                                numDisparities=num_disparities,
-    #                                blockSize=block_size,
-    #                                P1=8 * 3 * block_size ** 2,
-    #                                P2=32 * 3 * block_size ** 2,
-    #                                disp12MaxDiff=disp12_max_diff,
-    #                                preFilterCap=prefilter_cap,
-    #                                uniquenessRatio=uniqueness_ratio,
-    #                                speckleWindowSize=speckle_size,
-    #                                speckleRange=speckle_range,
-    #                                mode=cv2.STEREO_SGBM_MODE_SGBM_3WAY
-    #                                )
+    stereo = cv2.StereoSGBM_create(minDisparity=min_disparity,
+                                   numDisparities=num_disparities,
+                                   blockSize=block_size,
+                                   P1=8 * 3 * block_size ** 2,
+                                   P2=32 * 3 * block_size ** 2,
+                                   disp12MaxDiff=disp12_max_diff,
+                                   preFilterCap=prefilter_cap,
+                                   uniquenessRatio=uniqueness_ratio,
+                                   speckleWindowSize=speckle_size,
+                                   speckleRange=speckle_range,
+                                   mode=cv2.STEREO_SGBM_MODE_SGBM_3WAY
+                                   )
     # ###
 
     disp = stereo.compute(imgLG, imgRG)

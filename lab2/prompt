@@ -1,0 +1,10 @@
+exercise 1
+python 3dpsf_lab_2_laser/monocular_calibration_charuco.py --images_dir ./3dpsf_lab_2_laser/sample_data/calibration/camera/ --squares_x 13 --squares_y 8 --square_size 0.02 --marker_size 0.018 --out_file ./3dpsf_lab_2_laser/sample_data/calibration/calibration.yaml --debug_dir ./3dpsf_lab_2_laser/debug_data/
+
+exercise 2
+python ./3dpsf_lab_2_laser/test_camera_pose_charuco.py --images_dir ./3dpsf_lab_2_laser/sample_data/calibration/camera/ --squares_x 13 --squares_y 8 --square_size 0.02 --marker_size 0.018 --calib_file ./3dpsf_lab_2_laser/sample_data/calibration/calibration.yaml
+
+exercise 3
+the origin is the top left corner of the charuco board, x axis is along the width of the board, y axis is along the height of the board, and z axis is perpendicular to the board pointing outwards.
+
+exercise 4

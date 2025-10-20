@@ -19,6 +19,7 @@
     speckle_size=100
     speckle_range=31
     disp12_max_diff =8
+    prefilter_cap=63
 
 
     ## Aquired image  ENIS ALPHA 0 block matching
