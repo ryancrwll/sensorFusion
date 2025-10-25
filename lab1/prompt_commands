@@ -49,7 +49,7 @@ python ./sparse_matching_simple.py \
 --left_image ./sample_data/rectified_images_0/left/left_boxes.png \
 --right_image ./sample_data/rectified_images_0/right/right_boxes.png \
 --out_pts_file ./sample_data/points/boxes_0.ply \
---rect_stereo_calib ./sample_data/rectify_calib_0.yaml\
+--rect_stereo_calib ./sample_data/rectify_calib_0.yaml \
 --debug
 
 python ./sparse_matching_simple.py \
@@ -62,7 +62,7 @@ python ./sparse_matching_simple.py \
 --left_image ./sample_data/rectified_images_0/left/left_statue.png \
 --right_image ./sample_data/rectified_images_0/right/right_statue.png \
 --out_pts_file ./sample_data/points/statue_0.ply \
---rect_stereo_calib ./sample_data/rectify_calib_0.yaml\
+--rect_stereo_calib ./sample_data/rectify_calib_0.yaml \
 --debug
 
 python ./sparse_matching_simple.py \
@@ -72,7 +72,7 @@ python ./sparse_matching_simple.py \
 --rect_stereo_calib ./sample_data/rectify_calib_1.yaml 
 
 
-## Sparse matching 
+## Dense matching 
 python ./dense_matching.py \
 --left_image ./sample_data/rectified_images_0/left/left_statue.png \
 --right_image ./sample_data/rectified_images_0/right/right_statue.png \
@@ -80,7 +80,7 @@ python ./dense_matching.py \
 --out_pts_file ./sample_data/points/dense_statue_0.ply \
 --debug
 
-## Costum sparse matching
+## Costum dense matching
 python ./dense_matching_gui_costum.py \
 --left_image ./sample_data/rectified_images_0/left/left_statue.png \
 --right_image ./sample_data/rectified_images_0/right/right_statue.png \
@@ -90,13 +90,6 @@ python ./dense_matching_gui_costum_semi.py \
 --left_image ./sample_data/rectified_images_0/left/left_statue.png \
 --right_image ./sample_data/rectified_images_0/right/right_statue.png \
 --rect_stereo_calib ./sample_data/rectify_calib_0.yaml 
-
-
-
-
-
-
-
 
 ## Acquired data
 ## Calibation monocular (intrinsic)
@@ -135,6 +128,12 @@ python ./rectify_stereo_dataset.py \
 --alpha 0 \
 --stereo_calib ./sample_data/stereo_calib.yaml 
 
+python ./sparse_matching_simple.py \
+--left_image ./aquired_data/rectified_images_0/left/left_00047.png \
+--right_image ./aquired_data/rectified_images_0/right/right_00047.png \
+--out_pts_file ./aquired_data/points/ryan_0.ply \
+--rect_stereo_calib ./aquired_data/rectify_calib_0.yaml \
+--debug
 
 python ./dense_matching_gui_costum.py \
 --left_image ./aquired_data/rectified_images_0/left/left_00047.png \

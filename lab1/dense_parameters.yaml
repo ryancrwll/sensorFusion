@@ -35,3 +35,15 @@
     speckle_range=30
     disp12_max_diff =12
 
+    ## Aquired image  ENIS ALPHA 0 semi global matching
+    block_size= 2 * 5 + 5 
+    num_disparities= 16 * 9 
+    min_disparity= 0 
+    prefilter_type= 0 
+    prefilter_size= 2 * 13 + 5 
+    prefilter_cap= 25 
+    disp12_max_diff= 1 
+    texture_threshold= 34 
+    uniqueness_ratio= 0 
+    speckle_size= 2 * 1 
+    speckle_range= 1

@@ -63,14 +63,20 @@ def main():
     matches = bf.match(descL, descR)
     
     ### Ex. 5: Use the epipolar constraint on rectified images to further constrain the matches and reduce the outliers
+    
     if param.rect_stereo_calib_file:
-        print('- Applying epipolar constraint...')
-        # Compute the fundamental matrix
-        F, mask = cv2.findFundamentalMat(np.array([kpL[m.queryIdx].pt for m in matches]), 
-                                           np.array([kpR[m.trainIdx].pt for m in matches]), 
-                                           cv2.FM_RANSAC)
-        # Select only inlier matches
-        matches = [m for i, m in enumerate(matches) if mask[i]]
+        
+        good_matches = []
+        vertical_threshold = 6.0  # pixels
+
+        for m in matches:
+            ptL = kpL[m.queryIdx].pt
+            ptR = kpR[m.trainIdx].pt
+            
+            if abs(ptL[1] - ptR[1]) < vertical_threshold:
+                good_matches.append(m)
+
+        matches = good_matches
     ###
 
     if param.debug:
