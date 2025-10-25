@@ -38,7 +38,12 @@ def laser_plane_calib():
 
     # Create the charuco board
     dictionary = cv2.aruco.getPredefinedDictionary(param.dict_id)
-    board = cv2.aruco.CharucoBoard_create(param.squares_x, param.squares_y, param.square_size, param.marker_size, dictionary)    
+    # NOTE: Enis old opencv version 
+    # board = cv2.aruco.CharucoBoard_create(param.squares_x, param.squares_y, param.square_size, param.marker_size, dictionary)    
+    board = cv2.aruco.CharucoBoard((param.squares_x, param.squares_y),
+                               param.square_size,
+                               param.marker_size,
+                               dictionary)
 
     # List the files in the specified input folder
     files = utils.list_image_files(param.imgs_dir)
@@ -88,7 +93,7 @@ def laser_plane_calib():
     cv_file.write('B', laser_plane[1])
     cv_file.write('C', laser_plane[2])
     cv_file.write('D', laser_plane[3])
-    cv_file.release() 
+    cv_file.release()   
 
     # Draw the calibration results
     # - The camera frame

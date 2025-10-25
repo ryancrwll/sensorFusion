@@ -35,7 +35,7 @@ def test_ray_plane_intersection():
     
     # Draw the problem
     #   - The plane
-    plane_mesh = drawing.create_plane_mesh((A, B, C, D), scale=5)
+    plane_mesh = drawing.create_plane_mesh((A, B, C, D), scale=15)
     #   - The segments
     segment_length = 10
     rays_ends = rays_origin + rays_dir*segment_length # Draw the rays as segments, spanning 1 from the origin following the ray direction

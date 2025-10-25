@@ -48,7 +48,12 @@ def laser_reconstruction():
 
     # Create the charuco board
     dictionary = cv2.aruco.getPredefinedDictionary(param.dict_id)
-    board = cv2.aruco.CharucoBoard_create(param.squares_x, param.squares_y, param.square_size, param.marker_size, dictionary)    
+    # board = cv2.aruco.CharucoBoard_create(param.squares_x, param.squares_y, param.square_size, param.marker_size, dictionary)    
+        # NOTE: Enis old opencv version 
+    board = cv2.aruco.CharucoBoard((param.squares_x, param.squares_y),
+                                    param.square_size,
+                                    param.marker_size,
+                                    dictionary)
 
     # List the input images
     files = utils.list_image_files(param.imgs_dir)
@@ -72,22 +77,32 @@ def laser_reconstruction():
         ###             The remaining comments in this loop describe the steps that must be filled to achieve a reconstruction
 
         # Detect the laser in the image
-        
+        laser_pts = lib.detect_laser(img, param.min_red)        
 
         # Convert the detected image points to rays emanating from the camera (un-project them)
-        
+        rays_dir = lib.get_normalized_coordinates(laser_pts, camera_matrix, dist_coeffs)
 
         # Intersect them with the laser plane
-        
+        rays_origin = np.zeros_like(rays_dir)  # All rays start at the camera origin (0,0,0)
+        intersections = lib.rays_plane_intersection((A, B, C, D), rays_origin, rays_dir)
+        intersections = intersections[~np.isinf(intersections).any(axis=1)]
+
 
         # Compute the pose of the pattern with respect to the camera
-        
+        retval, c_Tf_w = lib.charuco_pose_estimation(cv2.cvtColor(img, cv2.COLOR_BGR2GRAY),
+                                             board, dictionary, camera_matrix, dist_coeffs)
+        if not retval or c_Tf_w is None:
+            print(f"[WARN] Charuco pose not found in {file}, skipping this frame.")
+            continue
+
 
         # We want the opposite transform: the one passing points from the camera frame to the world frame
-        
+        w_Tf_c = np.linalg.inv(c_Tf_w)
 
         # This intersection is within the camera frame, transform the points to the world frame given the pose estimated from the charuco pattern, store the value in int_pts_w variable, of shape num_pts x 3
-        
+        int_pts_h = np.hstack((intersections, np.ones((intersections.shape[0], 1))))
+        int_pts_w_h = (w_Tf_c @ int_pts_h.T).T
+        int_pts_w = int_pts_w_h[:, :3]
 
         # Add the points of this profile to the global list of 3D points (all_pts_list variable)
         all_pts_list.append(int_pts_w)

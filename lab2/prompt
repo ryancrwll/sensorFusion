@@ -1,10 +1,119 @@
 exercise 1
-python 3dpsf_lab_2_laser/monocular_calibration_charuco.py --images_dir ./3dpsf_lab_2_laser/sample_data/calibration/camera/ --squares_x 13 --squares_y 8 --square_size 0.02 --marker_size 0.018 --out_file ./3dpsf_lab_2_laser/sample_data/calibration/calibration.yaml --debug_dir ./3dpsf_lab_2_laser/debug_data/
+python 3dpsf_laser/monocular_calibration_charuco.py \
+--images_dir ./3dpsf_laser/sample_data/calibration/camera/ \
+--squares_x 13 \
+--squares_y 8 \
+--square_size 0.02 \
+--marker_size 0.018 \
+--out_file ./3dpsf_laser/sample_data/calibration/calibration.yaml \
+--debug_dir ./3dpsf_laser/debug_data/
 
 exercise 2
-python ./3dpsf_lab_2_laser/test_camera_pose_charuco.py --images_dir ./3dpsf_lab_2_laser/sample_data/calibration/camera/ --squares_x 13 --squares_y 8 --square_size 0.02 --marker_size 0.018 --calib_file ./3dpsf_lab_2_laser/sample_data/calibration/calibration.yaml
+python ./3dpsf_laser/test_camera_pose_charuco.py \
+--images_dir ./3dpsf_laser/sample_data/calibration/camera \
+--squares_x 13 \
+--squares_y 8 \
+--square_size 0.02 \
+--marker_size 0.018 \
+--calib_file ./3dpsf_laser/sample_data/calibration/calibration.yaml
 
 exercise 3
 the origin is the top left corner of the charuco board, x axis is along the width of the board, y axis is along the height of the board, and z axis is perpendicular to the board pointing outwards.
 
 exercise 4
+python ./3dpsf_laser/test_laser_detection.py \
+--images_dir ./3dpsf_laser/sample_data/calibration/laser \
+--min_red 100
+
+exercise 5
+python ./3dpsf_laser/test_normalized_coordinates.py \
+--camera_calib ./3dpsf_laser/sample_data/calibration/calibration.yaml \
+--num_samples 100 \
+--tolerance 1e-1
+
+exercise 6
+python ./3dpsf_laser/test_ray_plane_intersection.py \
+--num_rays 200 
+
+exercise 7
+python ./3dpsf_laser/test_plane_fit.py \
+--num_pts 1000 \
+--plane_a 10.0 \
+--plane_b 10.0 \
+--plane_c 10.0 \
+--plane_d 10.0
+
+exercise 8
+python ./3dpsf_laser/laser_plane_calibration.py \
+--images_dir ./3dpsf_laser/sample_data/calibration/laser \
+--camera_calib ./3dpsf_laser/sample_data/calibration/calibration.yaml \
+--out_file ./3dpsf_laser/sample_data/calibration/laser_plane_calib.yaml \
+--min_red 200 \
+--squares_x 13 \
+--squares_y 8 \
+--square_size 0.02 \
+--marker_size 0.018
+
+exercise 9
+# HORSE
+python ./3dpsf_laser/laser_reconstruction.py \
+--images_dir ./3dpsf_laser/sample_data/reconstruction/horse \
+--camera_calib ./3dpsf_laser/sample_data/calibration/calibration.yaml \
+--laser_calib ./3dpsf_laser/sample_data/calibration/laser_plane_calib.yaml \
+--out_pts ./3dpsf_laser/sample_data/reconstruction/horse_points.ply \
+--min_red 255 \
+--squares_x 13 \
+--squares_y 8 \
+--square_size 0.02 \
+--marker_size 0.018
+
+# GREEK
+python ./3dpsf_laser/laser_reconstruction.py \
+--images_dir ./3dpsf_laser/sample_data/reconstruction/greek \
+--camera_calib ./3dpsf_laser/sample_data/calibration/calibration.yaml \
+--laser_calib ./3dpsf_laser/sample_data/calibration/laser_plane_calib.yaml \
+--out_pts ./3dpsf_laser/sample_data/reconstruction/greek_points.ply \
+--min_red 255 \
+--squares_x 13 \
+--squares_y 8 \
+--square_size 0.02 \
+--marker_size 0.018
+
+
+################################################3
+exercise 1
+python 3dpsf_laser/monocular_calibration_charuco.py \
+--images_dir ./data/calibration/camera \
+--squares_x 13 \
+--squares_y 8 \
+--square_size 0.02 \
+--marker_size 0.018 \
+--out_file ./data/calibration/camera_calibration.yaml \
+--debug_dir ./data/calibration/debug/debug_data/
+
+exercise 8
+python ./3dpsf_laser/laser_plane_calibration.py \
+--images_dir ./data/calibration/laser \
+--camera_calib ./data/calibration/camera_calibration.yaml \
+--out_file ./data/calibration/laser_plane_calib.yaml \
+--min_red 200 \
+--squares_x 13 \
+--squares_y 8 \
+--square_size 0.02 \
+--marker_size 0.018
+
+exercise 9
+python ./3dpsf_laser/laser_reconstruction.py \
+--images_dir ./data/reconstruction \
+--camera_calib ./data/calibration/camera_calibration.yaml \
+--laser_calib ./data/calibration/laser_plane_calib.yaml \
+--out_pts ./data/reconstruction/points.ply \
+--min_red 255 \
+--squares_x 13 \
+--squares_y 8 \
+--square_size 0.02 \
+--marker_size 0.018
+
+
+
+

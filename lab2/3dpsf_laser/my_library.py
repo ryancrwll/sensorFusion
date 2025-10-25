@@ -64,7 +64,19 @@ def detect_laser(img, min_red):
     Returns
         - A Numpy array of size num_pts x 2
     """
-    pass
+    pts = []
+
+    for y in range(img.shape[0]):                   # loop over rows
+        red_row = img[y, :, 2]                      # extract red channel along row y
+        valid_idx = np.where(red_row >= min_red)[0] # mask of pixels with enough red
+        if len(valid_idx) == 0:                     # if no valid pixels found
+            continue
+
+        red_vals = red_row[valid_idx]               # red values of the valid pixels
+        cog_x = np.sum(valid_idx * red_vals) / np.sum(red_vals)
+        pts.append([cog_x, y])                      # (x, y) format
+
+    return np.array(pts)
 
 def fit_plane(points):
     """
@@ -76,6 +88,22 @@ def fit_plane(points):
         - A 4-elements tuple containing the parameters of the plane in normal form Ax+By+Cz+D=0.
     """
     pass
+    n = points.shape[0]                             # number of points
+
+    centroid = 1/n * np.sum(points, axis=0)         # compute centroid
+
+    A = np.zeros((3, 3))
+    for i in range(n):                              # compute covariance matrix
+        p = points[i] - centroid                    
+        A += np.outer(p, p)                         
+    A /= n                                          # normalize by number of points
+
+    _, _, Vt = np.linalg.svd(A)                     # Compute the normal vector of the plane
+    normal = Vt[-1]
+
+    D = -np.dot(normal, centroid)                   # Compute the D parameter
+
+    return (normal[0], normal[1], normal[2], D)
 
 
 def get_normalized_coordinates(p2ds, camera_matrix, dist_coeffs):
@@ -89,8 +117,12 @@ def get_normalized_coordinates(p2ds, camera_matrix, dist_coeffs):
     Returns:
         - normalized coordinates, a Numpy array of size num_pts x 3 where the 3rd column is a vector of ones.
     """
-    pass
-    
+    und_points = cv2.undistortPoints(cameraMatrix=camera_matrix,
+                                     distCoeffs=dist_coeffs,
+                                     src=p2ds)
+    und_points_squeezed = und_points.squeeze()      # remove extra dimension (n, 1, 2) -> (n, 2)
+    return np.hstack((und_points_squeezed, np.ones((und_points_squeezed.shape[0], 1))))
+
 
 def rays_plane_intersection(plane, rays_origin, rays_direction, epsilon=1e-6):
     """
@@ -106,3 +138,24 @@ def rays_plane_intersection(plane, rays_origin, rays_direction, epsilon=1e-6):
         In case there is no intersection, we mark it with an infinite point: [np.Inf, np.Inf, np.Inf]
     """
     pass
+    A, B, C, D = plane                                      # unpack plane parameters
+    n = np.array([A, B, C])                                 # normal vector of the plane       
+    points_3D = []
+    for i in range(rays_origin.shape[0]):                   # iterate over rays
+        p0 = rays_origin[i]
+        d = rays_direction[i]
+
+        denom = np.dot(n, d)                    
+        if abs(denom) < epsilon:                            # ray is parallel to the plane   
+            points_3D.append([np.Inf, np.Inf, np.Inf])
+            continue
+
+        t = -(np.dot(n, p0) + D) / denom
+        if t < 0:                                           # intersection is behind the ray origin
+            points_3D.append([np.Inf, np.Inf, np.Inf])
+            continue
+
+        intersection = p0 + t * d                           # compute intersection point
+        points_3D.append(intersection)
+
+    return np.array(points_3D)
