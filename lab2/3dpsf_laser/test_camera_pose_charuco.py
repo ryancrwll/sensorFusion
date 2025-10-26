@@ -55,18 +55,33 @@ def test_camera_pose_charuco():
         # Image used for visualization (a copy of the input image, but with 3 channels to be able to draw the markers in color)
         vis = cv2.cvtColor(img, cv2.COLOR_GRAY2BGR)
 
-        pose_computed, c_Tf_w = lib.charuco_pose_estimation(img, board, dictionary, camera_matrix, dist_coeffs)
-        rvec, _ = cv2.Rodrigues(c_Tf_w[0:3, 0:3])
-        tvec = c_Tf_w[0:3, 3].squeeze()
+        # pose_computed, c_Tf_w = lib.charuco_pose_estimation(img, board, dictionary, camera_matrix, dist_coeffs)
+        # rvec, _ = cv2.Rodrigues(c_Tf_w[0:3, 0:3])
+        # tvec = c_Tf_w[0:3, 3].squeeze()
 
-        if pose_computed == True:
-            cv2.drawFrameAxes(vis, camera_matrix, dist_coeffs, rvec, tvec, 0.1)  # axis length 100 can be changed according to your requirement
+        # if pose_computed == True:
+        #     cv2.drawFrameAxes(vis, camera_matrix, dist_coeffs, rvec, tvec, 0.1)  # axis length 100 can be changed according to your requirement
+        #     cv2.namedWindow("Charuco detection", cv2.WINDOW_NORMAL)
+        #     cv2.imshow("Charuco detection", vis)
+        #     print('    - Showing pose estimation for image ' + str(os.path.basename(file)) + ', press any key to continue...')
+        #     cv2.waitKey()
+        # else:
+        #     print('Pattern not detected or pose not correctly estimated')
+
+        pose_computed, c_Tf_w = lib.charuco_pose_estimation(img, board, dictionary, camera_matrix, dist_coeffs)
+
+        if pose_computed and c_Tf_w is not None:
+            rvec, _ = cv2.Rodrigues(c_Tf_w[0:3, 0:3])
+            tvec = c_Tf_w[0:3, 3].squeeze()
+
+            cv2.drawFrameAxes(vis, camera_matrix, dist_coeffs, rvec, tvec, 0.1)
             cv2.namedWindow("Charuco detection", cv2.WINDOW_NORMAL)
             cv2.imshow("Charuco detection", vis)
             print('    - Showing pose estimation for image ' + str(os.path.basename(file)) + ', press any key to continue...')
             cv2.waitKey()
         else:
             print('Pattern not detected or pose not correctly estimated')
+
 
 if __name__ == '__main__':
     test_camera_pose_charuco()

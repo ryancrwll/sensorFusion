@@ -18,17 +18,20 @@ python ./3dpsf_laser/test_camera_pose_charuco.py \
 --calib_file ./3dpsf_laser/sample_data/calibration/calibration.yaml
 
 exercise 3
-the origin is the top left corner of the charuco board, x axis is along the width of the board, y axis is along the height of the board, and z axis is perpendicular to the board pointing outwards.
+"""
+the origin is the top left corner of the charuco board, x axis is along the width of the board, 
+y axis is along the height of the board, and z axis is perpendicular to the board pointing outwards.
+"""
 
 exercise 4
 python ./3dpsf_laser/test_laser_detection.py \
 --images_dir ./3dpsf_laser/sample_data/calibration/laser \
---min_red 100
+--min_red 255
 
 exercise 5
 python ./3dpsf_laser/test_normalized_coordinates.py \
 --camera_calib ./3dpsf_laser/sample_data/calibration/calibration.yaml \
---num_samples 100 \
+--num_samples 255 \
 --tolerance 1e-1
 
 exercise 6
@@ -89,14 +92,28 @@ python 3dpsf_laser/monocular_calibration_charuco.py \
 --square_size 0.02 \
 --marker_size 0.018 \
 --out_file ./data/calibration/camera_calibration.yaml \
---debug_dir ./data/calibration/debug/debug_data/
+--debug_dir ./data/calibration/debug
+
+exercise 2
+python ./3dpsf_laser/test_camera_pose_charuco.py \
+--images_dir ./data/calibration/camera \
+--squares_x 13 \
+--squares_y 8 \
+--square_size 0.02 \
+--marker_size 0.018 \
+--calib_file ./data/calibration/camera_calibration.yaml
+
+exercise 4
+python ./3dpsf_laser/test_laser_detection.py \
+--images_dir ./data/calibration/laser_edited \
+--min_red 255
 
 exercise 8
 python ./3dpsf_laser/laser_plane_calibration.py \
---images_dir ./data/calibration/laser \
+--images_dir ./data/calibration/laser_edited \
 --camera_calib ./data/calibration/camera_calibration.yaml \
 --out_file ./data/calibration/laser_plane_calib.yaml \
---min_red 200 \
+--min_red 255 \
 --squares_x 13 \
 --squares_y 8 \
 --square_size 0.02 \
@@ -104,15 +121,49 @@ python ./3dpsf_laser/laser_plane_calibration.py \
 
 exercise 9
 python ./3dpsf_laser/laser_reconstruction.py \
---images_dir ./data/reconstruction \
+--images_dir ./data/reconstruction/set_1 \
 --camera_calib ./data/calibration/camera_calibration.yaml \
 --laser_calib ./data/calibration/laser_plane_calib.yaml \
---out_pts ./data/reconstruction/points.ply \
+--out_pts ./data/reconstruction/set_1/points.ply \
 --min_red 255 \
 --squares_x 13 \
 --squares_y 8 \
 --square_size 0.02 \
 --marker_size 0.018
+
+python ./3dpsf_laser/laser_reconstruction.py \
+--images_dir ./data/reconstruction/set_3 \
+--camera_calib ./data/calibration/camera_calibration.yaml \
+--laser_calib ./data/calibration/laser_plane_calib.yaml \
+--out_pts ./data/reconstruction/set_3/points.ply \
+--min_red 255 \
+--squares_x 13 \
+--squares_y 8 \
+--square_size 0.02 \
+--marker_size 0.018
+
+
+
+
+
+
+
+
+
+
+
+python ./3dpsf_laser/test_camera_pose_charuco.py \
+--images_dir ./data/reconstruction/set_3 \
+--squares_x 13 \
+--squares_y 8 \
+--square_size 0.02 \
+--marker_size 0.018 \
+--calib_file ./data/calibration/camera_calibration.yaml
+
+python ./3dpsf_laser/test_laser_detection.py \
+--images_dir ./data/reconstruction/set_3 \
+--min_red 255
+
 
 
 
